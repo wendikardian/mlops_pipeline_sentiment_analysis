@@ -222,7 +222,7 @@ TUNER_MODULE_FILE = "sentiment_tuner.py"
 # 
 # LABEL_KEY = "label"
 # FEATURE_KEY = "tweet"
-# NUM_EPOCHS = 2
+# NUM_EPOCHS = 3
 # 
 # TunerFnResult = NamedTuple("TunerFnResult", [
 #     ("tuner", base_tuner.BaseTuner),
@@ -298,6 +298,7 @@ TUNER_MODULE_FILE = "sentiment_tuner.py"
 # 
 #     model = tf.keras.Model(inputs=inputs, outputs=outputs)
 # 
+# 
 #     model.compile(
 #         optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
 #         loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
@@ -351,13 +352,16 @@ TUNER_MODULE_FILE = "sentiment_tuner.py"
 from tfx.proto import example_gen_pb2, trainer_pb2, pusher_pb2
 tuner = Tuner(
     module_file=os.path.abspath(TUNER_MODULE_FILE),
-    examples=transform.outputs["transformed_examples"],
+        examples=transform.outputs["transformed_examples"],
     transform_graph=transform.outputs["transform_graph"],
     schema=schema_gen.outputs["schema"],
     train_args=trainer_pb2.TrainArgs(splits=["train"], num_steps=100),
     eval_args=trainer_pb2.EvalArgs(splits=["eval"], num_steps=50),
 )
-interactive_context.run(tuner)
+try:
+  interactive_context.run(tuner)
+except :
+  pass
 
 """# Trainning Model (Trainner)
 melatih model machine learning menggunakan data yang telah dipreprocess, dengan mengoptimalkan parameter-model sesuai konfigurasi yang telah ditentukan.
